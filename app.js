@@ -13,11 +13,11 @@ var path = require('path');
 
 var mongo = require('mongoskin');
 var db = mongo.db([
-		'localhost:27017/?auto_reconect'
-	], {
-		database: 'nodetest3',
-		safe: true
-	}
+    'localhost:27017/?auto_reconnect'
+    ], {
+        database: 'nodetest3',
+        safe: true
+    }
 );
 
 var app = express();
@@ -40,7 +40,8 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
+app.get('/userlist', user.userlist(db));
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
