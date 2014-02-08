@@ -5,8 +5,12 @@ var userListData = [];
 
 $(document).ready(function(){
 
+
 	//populate the user table on initial page load
 	populateTable();
+	
+
+	$('#userList table tbody').on('click', 'td a.linkshowuser', showUserInfo);
 
 });
 
@@ -15,10 +19,17 @@ $(document).ready(function(){
 function populateTable(){
 		//empty content string
 
+
 		var tableContent = '';
+
+		
+		
+
 
 		//Jquery AJAX call for JSON
 		$.getJSON('/userlist', function( data ){
+
+			userListData = data;
 
 				//for each item in our JSON, add a table row 
 				//and cells to the content string
@@ -34,4 +45,35 @@ function populateTable(){
 				$('#userList table tbody').html(tableContent);
 		});
 
-	};
+};
+
+//Show user info
+
+function showUserInfo(event){
+
+	//prevent link from firing
+	event.preventDefault();
+
+
+	//Retrieve username from link rel attribute
+	var thisUserName = $(this).attr('rel');
+
+
+	//Get index of object based on id value
+	var arrayPosition = userListData.map(function(arrayItem){
+		return arrayItem.username; }).indexOf(thisUserName);
+
+
+	
+
+	//Get our user object
+	var thisUserObject = userListData[arrayPosition];
+
+	//populate info box
+
+	$('#userInfoName').text(thisUserObject.fullname);
+	$('#userInfoAge').text(thisUserObject.age);
+	$('#userInfoGender').text(thisUserObject.gender);
+	$('#userInfoLocation').text(thisUserObject.location);
+
+};
